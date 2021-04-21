@@ -1,2 +1,2 @@
 # images_recognition
-Recocignise images from pictures
+Recognise images from pictures
