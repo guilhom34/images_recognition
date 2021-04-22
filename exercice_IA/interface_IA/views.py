@@ -1,14 +1,17 @@
+
 import os
 import pathlib
 from datetime import datetime
 
+
 from django.shortcuts import render
 from django.http import HttpResponse
-import uuid
+
 
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView
 from interface_IA.common.training import test_func
+from interface_IA.common.training import predict_image
 from interface_IA.forms import UploadFileForm
 
 from .models import Images
@@ -49,3 +52,5 @@ class ImagesListView(ListView):
     def get_queryset(self):
         queryset = super(ImagesListView, self).get_queryset()
         return queryset
+    res = predict_image(file)
+    return HttpResponse(str(res))
