@@ -1,12 +1,17 @@
 import os
 import pathlib
+from datetime import datetime
 
 from django.shortcuts import render
 from django.http import HttpResponse
 import uuid
+
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DeleteView
+from interface_IA.common.training import test_func
 from interface_IA.forms import UploadFileForm
 
-from common.training import prediction
+from .models import Images
 
 
 def index(request):
@@ -19,12 +24,28 @@ def index(request):
 def form_test(request):
     form = UploadFileForm(request.POST, request.FILES)
     file = request.FILES['file']
-    extension = pathlib.PureWindowsPath(file.name).suffix
-    file_name = str(uuid.uuid4()) + extension
-    file_path = os.getcwd() + '//temp//' + file_name
-    with open(file_path, 'wb+') as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
-    res = prediction(file_path)
-    print(res)
-    return HttpResponse("Hello, world. You're at the polls index.")
+    res = test_func(file)
+    image = Images(datetime.now(), file.size, file.name, res)
+    context = {
+         'date': image.date,
+         'name': image.name,
+         'size': image.size,
+         'result': image.result,
+     }
+    return render(request, 'interface_IA/image_list.html', context)
+
+class ImagesDelete(DeleteView):
+    model = Images
+    fields = '__all__'
+    template_name_suffix = '_delete'
+    success_url = reverse_lazy('image_list')
+
+
+class ImagesListView(ListView):
+    model = Images
+    fields = '__all__'
+    template_name = 'interface_IA/image_list.html'
+
+    def get_queryset(self):
+        queryset = super(ImagesListView, self).get_queryset()
+        return queryset

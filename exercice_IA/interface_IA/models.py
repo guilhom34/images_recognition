@@ -4,11 +4,19 @@ from django.db import models
 
 
 class Images(models.Model):
-    title = models.CharField(max_length=50)
-    result = models.FloatField()
     date = models.DateTimeField()
-    weight = models.IntegerField()
+    name = models.CharField(max_length=50)
+    size = models.IntegerField()
+    result = models.CharField(max_length=200)
 
+    def __init__(self, date, name, size, result):
+        self.name = name
+        self.result = result
+        self.date = date
+        self.size = size
 
     def __str__(self):
-        return self.title
+        return self.name
+        return self.date
+        return self.size
+        return self.result
