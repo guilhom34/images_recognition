@@ -4,6 +4,8 @@ import pathlib
 from django.shortcuts import render
 from django.http import HttpResponse
 import uuid
+
+from interface_IA.common.training import test_func
 from interface_IA.forms import UploadFileForm
 
 
@@ -23,4 +25,5 @@ def form_test(request):
     with open(file_path, 'wb+') as destination:
         for chunk in file.chunks():
             destination.write(chunk)
+    test_func(file_path)
     return HttpResponse("Hello, world. You're at the polls index.")
