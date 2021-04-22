@@ -1,18 +1,18 @@
-import os
-
 import tensorflow.keras
 from PIL import Image, ImageOps
 import numpy as np
 
 
-def test_func(image_path):
-    # IMAGES_DIR = './fictif_characters/Aclam_Halidda.jpg'
-    IMAGES_DIR = image_path
+class_names = ['humain', 'plante', 'animal', 'personage fictif', 'vehicule']
+
+
+def predict_image(raw_image):
+
     # Disable scientific notation for clarity
     np.set_printoptions(suppress=True)
 
     # Load the model
-    model = tensorflow.keras.models.load_model(os.getcwd() + '\\interface_IA\\common\\keras_model.h5')
+    model = tensorflow.keras.models.load_model('keras_model.h5')
 
     # Create the array of the right shape to feed into the keras model
     # The 'length' or number of images you can put into the array is
@@ -20,7 +20,7 @@ def test_func(image_path):
     data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 
     # Replace this with the path to your image
-    image = Image.open(IMAGES_DIR)
+    image = Image.open(raw_image)
 
     # resize the image to a 224x224 with the same strategy as in TM2:
     # resizing the image to be at least 224x224 and then cropping from the center
@@ -31,7 +31,7 @@ def test_func(image_path):
     image_array = np.asarray(image)
 
     # display the resized image
-    image.show()
+    # image.show()
 
     # Normalize the image
     normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
@@ -41,5 +41,9 @@ def test_func(image_path):
 
     # run the inference
     prediction = model.predict(data)
-    print(prediction)
-    print(model)
+
+    res = {cla: '{:.2%}'.format(pred) for (pred, cla) in zip(prediction[0].tolist(), class_names)}
+
+    print(res)
+
+    return res
