@@ -2,22 +2,15 @@ import tensorflow.keras
 from PIL import Image, ImageOps
 import numpy as np
 
-
 class_names = ['humain', 'plante', 'animal', 'personage fictif', 'vehicule']
 
 
 def predict_image(raw_image):
-
     # Disable scientific notation for clarity
     np.set_printoptions(suppress=True)
 
     # Load the model
-<<<<<<< HEAD
-    #print(os.getcwd())
-    model = tensorflow.keras.models.load_model('interface_IA/common/keras_model.h5')
-=======
     model = tensorflow.keras.models.load_model('keras_model.h5')
->>>>>>> e477bd96690b96b93472172fe805efe15dd8eafa
 
     # Create the array of the right shape to feed into the keras model
     # The 'length' or number of images you can put into the array is
@@ -50,5 +43,10 @@ def predict_image(raw_image):
 
     prediction = prediction[0].tolist()
     class_names = ['humains', 'plantes', 'animaux', 'personnages fictif', 'véhicule']
-    res = {cla: '{:.2%}' .format(pred) for (pred, cla) in zip(prediction, class_names) }
+    var = {
+        'class_name': 'res4',
+        'accuracy': 0.963
+    }
+    res = {cla: '{:.2%}'.format(pred) for (pred, cla) in zip(prediction, class_names)}
+    res = list(map(lambda item: {'class_name':item[0],'accuracy':item[1]}, zip(class_names, prediction)))
     return res

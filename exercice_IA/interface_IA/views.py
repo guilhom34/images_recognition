@@ -1,56 +1,47 @@
+from datetime import datetime, timezone
 
-import os
-import pathlib
-from datetime import datetime
-
-
-from django.shortcuts import render
+from bson import ObjectId
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
 
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView
-from interface_IA.common.training import test_func
 from interface_IA.common.training import predict_image
 from interface_IA.forms import UploadFileForm
 
-from .models import Images
+from .models import Image
 
 
-def index(request):
-    context = {
-        'form': UploadFileForm()
-    }
-    return render(request, 'interface_IA/home_page.html', context)
-
-
-def form_test(request):
-    form = UploadFileForm(request.POST, request.FILES)
-    file = request.FILES['file']
-    res = test_func(file)
-    image = Images(datetime.now(), file.size, file.name, res)
-    context = {
-         'date': image.date,
-         'name': image.name,
-         'size': image.size,
-         'result': image.result,
-     }
-    return render(request, 'interface_IA/image_list.html', context)
+def home_page(request):
+    if request.method == 'GET':
+        context = {
+            'form': UploadFileForm()
+        }
+        return render(request, 'interface_IA/home_page.html', context)
+    elif request.method == 'POST':
+        file = request.FILES['file']
+        res = predict_image(file)
+        image = Image.objects.create(
+            date=datetime.now(timezone.utc),
+            name=file.name,
+            size=file.size,
+            result=res
+        )
+        context = {
+            'form': UploadFileForm(),
+            'image': image
+        }
+        return render(request, 'interface_IA/home_page.html', context)
 
 class ImagesDelete(DeleteView):
-    model = Images
-    fields = '__all__'
-    template_name_suffix = '_delete'
+    model = Image
     success_url = reverse_lazy('image_list')
+
+    def get_object(self, queryset=None):
+        query = Image.objects.filter(_id=ObjectId(oid=self.kwargs['pk']))
+        return query.first()
 
 
 class ImagesListView(ListView):
-    model = Images
-    fields = '__all__'
-    template_name = 'interface_IA/image_list.html'
+    model = Image
 
-    def get_queryset(self):
-        queryset = super(ImagesListView, self).get_queryset()
-        return queryset
-    res = predict_image(file)
-    return HttpResponse(str(res))

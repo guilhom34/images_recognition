@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Exercice IA</title>
-        <style>
+            <style>
             td,
             th {
                 border: 1px solid rgb(190, 190, 190);
@@ -46,14 +46,8 @@
         </style>
     </head>
     <body>
-        <h1>Analyser une image</h1>
-        <form action="/" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" value="Submit">
-        </form>
-        {% if image is not None %}
-        <p>
+        <form method="post">{% csrf_token %}
+            <p>Are you sure you want to delete the image ?</p>
             <table>
                 <tr>
                     <th scope="col">ID</th>
@@ -63,12 +57,12 @@
                     <th scope="col">Résultat</th>
                 </tr>
                 <tr>
-                    <th scope="row">{{ image.get_id }}</th>
-                    <td>{{ image.date }}</td>
-                    <td>{{ image.name }}</td>
-                    <td>{{ image.size }} octets</td>
+                    <th scope="row">{{ object.get_id }}</th>
+                    <td>{{ object.date }}</td>
+                    <td>{{ object.name }}</td>
+                    <td>{{ object.size }} octets</td>
                     <td>
-                    {% for class_name, accuracy in image.get_fomatted_results.items %}
+                    {% for class_name, accuracy in object.get_fomatted_results.items %}
                         <p {% if forloop.first %}class="highest_accuracy"{% endif %}>
                             <b>{{ class_name }} :</b> {{ accuracy }}
                         </p>
@@ -76,10 +70,8 @@
                     </td>
                 </tr>
             </table>
-        </p>
-        {% endif %}
-        <p>
-            <a href="list">Tous les résultats</a>
-        </p>
+            <input type="submit" value="Confirm">
+            <a href="/list/">Annuler</a>
+        </form>
     </body>
 </html>
