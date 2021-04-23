@@ -8,9 +8,19 @@
     <h2>Image List</h2>
     <ul>
 
-        <li>{{ name }} {{ date }} {{ weight }} {{ result }} {{ id }}
+        <li>Nom : {{ name }}</li>
+        <li>Date : {{ date }}</li>
+        <li>Taille : {{ size }}</li>
 
-            </li>
     </ul>
+    <ul>
+        {% for key, value in result.items %}
+
+        <li>{{ key }}: {{ value }}</li>
+
+        {% endfor %}
+    </ul>
+
+
 </body>
 </html>

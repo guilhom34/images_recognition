@@ -10,10 +10,10 @@ class Images(models.Model):
     result = models.CharField(max_length=200)
 
     def __init__(self, date, name, size, result):
-        self.name = name
-        self.result = result
         self.date = date
+        self.name = name
         self.size = size
+        self.result = result
 
     def __str__(self):
         return self.name
