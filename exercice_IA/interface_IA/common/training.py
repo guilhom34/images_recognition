@@ -1,8 +1,8 @@
+import numpy as np
 import tensorflow.keras
 from PIL import Image, ImageOps
-import numpy as np
 
-class_names = ['humain', 'plante', 'animal', 'personage fictif', 'vehicule']
+class_names = ['humains', 'plantes', 'animaux', 'personnages fictif', 'véhicule']
 
 
 def predict_image(raw_image):
@@ -42,11 +42,7 @@ def predict_image(raw_image):
     prediction = model.predict(data)
 
     prediction = prediction[0].tolist()
-    class_names = ['humains', 'plantes', 'animaux', 'personnages fictif', 'véhicule']
-    var = {
-        'class_name': 'res4',
-        'accuracy': 0.963
-    }
-    res = {cla: '{:.2%}'.format(pred) for (pred, cla) in zip(prediction, class_names)}
-    res = list(map(lambda item: {'class_name':item[0],'accuracy':item[1]}, zip(class_names, prediction)))
+
+    res = list(map(lambda item: {'class_name': item[0], 'accuracy': item[1]}, zip(class_names, prediction)))
+
     return res

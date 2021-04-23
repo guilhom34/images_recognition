@@ -46,30 +46,33 @@
         </style>
     </head>
     <body>
+        <h1>Supprimer une image</h1>
         <form method="post">{% csrf_token %}
             <p>Are you sure you want to delete the image ?</p>
-            <table>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Nom</th>
-                    <th scope="col">Taille</th>
-                    <th scope="col">Résultat</th>
-                </tr>
-                <tr>
-                    <th scope="row">{{ object.get_id }}</th>
-                    <td>{{ object.date }}</td>
-                    <td>{{ object.name }}</td>
-                    <td>{{ object.size }} octets</td>
-                    <td>
-                    {% for class_name, accuracy in object.get_fomatted_results.items %}
-                        <p {% if forloop.first %}class="highest_accuracy"{% endif %}>
-                            <b>{{ class_name }} :</b> {{ accuracy }}
-                        </p>
-                    {% endfor %}
-                    </td>
-                </tr>
-            </table>
+            <p>
+                <table>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Taille</th>
+                        <th scope="col">Résultat</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">{{ object.get_id }}</th>
+                        <td>{{ object.date }}</td>
+                        <td>{{ object.name }}</td>
+                        <td>{{ object.size }} octets</td>
+                        <td>
+                        {% for class_name, accuracy in object.get_fomatted_results.items %}
+                            <p {% if forloop.first %}class="highest_accuracy"{% endif %}>
+                                <b>{{ class_name }} :</b> {{ accuracy }}
+                            </p>
+                        {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </p>
             <input type="submit" value="Confirm">
             <a href="/list/">Annuler</a>
         </form>

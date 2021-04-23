@@ -1,14 +1,12 @@
 from datetime import datetime, timezone
 
 from bson import ObjectId
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView
+
 from interface_IA.common.training import predict_image
 from interface_IA.forms import UploadFileForm
-
 from .models import Image
 
 
@@ -33,6 +31,7 @@ def home_page(request):
         }
         return render(request, 'interface_IA/home_page.html', context)
 
+
 class ImagesDelete(DeleteView):
     model = Image
     success_url = reverse_lazy('image_list')
@@ -44,4 +43,5 @@ class ImagesDelete(DeleteView):
 
 class ImagesListView(ListView):
     model = Image
+    ordering = '-date'
 

@@ -1,5 +1,3 @@
-from datetime import timezone, datetime, timedelta
-
 from djongo import models
 
 
@@ -29,8 +27,10 @@ class Image(models.Model):
         return self._id
 
     def get_fomatted_results(self):
-        res = {res_line['class_name']: '{:.2%}'.format(res_line['accuracy']) for res_line in sorted(self.result, key= lambda item: item['accuracy'], reverse=True)}
+        res = {res_line['class_name']: '{:.2%}'.format(res_line['accuracy']) for res_line in
+               sorted(self.result, key=lambda item: item['accuracy'], reverse=True)}
         return res
 
     def __str__(self):
-        return 'Image(date=\'{}\',name=\'{}\',size=\'{}\',result=\'{}\')'.format(self.date, self.name,self.size,self.result)
+        return 'Image(date=\'{}\',name=\'{}\',size=\'{}\',result=\'{}\')'.format(self.date, self.name, self.size,
+                                                                                 self.result)
